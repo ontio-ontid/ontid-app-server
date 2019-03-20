@@ -46,7 +46,7 @@
 
 
 ### 如何生成 JWT
-参考 [MyJWTUtils](https://github.com/ontio-ontid/ontid-app-server/blob/master/src/main/java/com/github/ontid_demo/util/MyJWTUtils.java) 中的sign方法
+参考 [MyJWTUtils](https://github.com/ontio-ontid/ontid-app-server/blob/master/src/main/java/com/github/ontid_demo/util/MyJWTUtils.java) 中的 ```sign``` 方法
 
 ### JWT 如何验签
-参考 [MyJWTUtils](https://github.com/ontio-ontid/ontid-app-server/blob/master/src/main/java/com/github/ontid_demo/util/MyJWTUtils.java) 中的verify方法
+参考 [MyJWTUtils](https://github.com/ontio-ontid/ontid-app-server/blob/master/src/main/java/com/github/ontid_demo/util/MyJWTUtils.java) 中的 ```verify``` 方法
