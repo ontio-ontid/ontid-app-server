@@ -28,10 +28,11 @@ public class MyJWTUtils {
     private void verify(String token) throws Exception {
         DecodedJWT jwt = JWT.decode(token);
         String content = String.format("%s.%s", jwt.getHeader(), jwt.getPayload());
-        String signature = jwt.getSignature();
 
-        Account account = new Account(false, Helper.hexToBytes(Base64ConvertUtil.decode(Constant.ONTID_PUBLIC_KEY)));
-        boolean flag = account.verifySignature(content.getBytes(), signature.getBytes());
+        String signature = Base64ConvertUtil.decode(jwt.getSignature());
+
+        Account account = new Account(false, Helper.hexToBytes(Constant.ONTID_PUBLIC_KEY));
+        boolean flag = account.verifySignature(content.getBytes(), Helper.hexToBytes(signature));
         if (!flag) {
             throw new Exception("Token verify error");
         }

@@ -9,9 +9,9 @@ public class Constant {
      */
     public static final String ONTID_PROVIDE_WIF = "";
     /**
-     * ontid后台的公钥
+     * ontid后台的公钥,测试网的
      */
-    public static final String ONTID_PUBLIC_KEY = "";
+    public static final String ONTID_PUBLIC_KEY = "026d3557e55fffe7bc5a9a8fc0c7361bc48590c17bf4d0d345e3f354bb64a0452a";
     /**
      * 三方的Ontid
      */
