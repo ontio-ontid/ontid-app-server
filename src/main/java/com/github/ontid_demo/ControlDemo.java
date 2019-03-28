@@ -21,6 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 public class ControlDemo {
 
     /**
+     * 你可以从这个网站上获取token http://139.219.136.188:10390/#/signin
+     */
+
+    /**
      * 用户登录后获取的
      *
      * @return
