@@ -3,7 +3,7 @@
 
 
 
-## 对接步骤
+## 登录对接步骤
 
 1. 你需要先联系我们注册应用方的 ontid, 在 [Constant](https://github.com/ontio-ontid/ontid-app-server/blob/master/src/main/java/com/github/ontid_demo/util/Constant.java) 文件中填写注册时返回的参数
 ```text
@@ -34,6 +34,10 @@
    String getBalanceUrl = "http://192.168.3.67:10331/api/v1/ontid/getbalance";
    String refreshUrl = "http://192.168.3.67:10331/api/v1/access/refresh";
 ```
+
+## 支付和调用合约对接步骤
+
+发起支付订单请求例子，包含回调接口：[PaymentController](https://github.com/ontio-ontid/ontid-app-server/blob/master/src/main/java/com/github/ontid_demo/controller/PaymentController.java)
 
 ## JWT 验证签名
 
