@@ -67,7 +67,24 @@ public class MyJwtCreator {
         log.info("sign,content:{},signature:{}", content, signature);
         return String.format("%s.%s", content, signature);
     }
-
+    public String sign(Account account) throws Exception {
+        String header = Base64.encodeBase64URLSafeString(this.headerJson.getBytes(StandardCharsets.UTF_8));
+        String payload = Base64.encodeBase64URLSafeString(this.payloadJson.getBytes(StandardCharsets.UTF_8));
+        String content = String.format("%s.%s", header, payload);
+//        byte[] signatureBytes = this.algorithm.sign(content.getBytes(StandardCharsets.UTF_8));
+        byte[] signatureBytes = new byte[0];
+        try {
+            DataSignature sign = new DataSignature(SignatureScheme.SHA256WITHECDSA, account, content.getBytes());
+            signatureBytes = Helper.toHexString(sign.signature()).getBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("sign token error : {}" + e.getMessage());
+            throw new Exception("sign token error : " + e.getMessage());
+        }
+        String signature = Base64.encodeBase64URLSafeString(signatureBytes);
+        log.info("sign,content:{},signature:{}", content, signature);
+        return String.format("%s.%s", content, signature);
+    }
     public static class Builder {
         private final Map<String, Object> payloadClaims = new HashMap();
         private Map<String, Object> headerClaims = new HashMap();
@@ -186,7 +203,11 @@ public class MyJwtCreator {
 
             return (new MyJwtCreator(this.headerClaims, this.payloadClaims)).sign();
         }
-
+        public String sign(Account account) throws Exception {
+            this.headerClaims.put("alg", "ES256");
+            this.headerClaims.put("typ", "JWT");
+            return (new MyJwtCreator(this.headerClaims, this.payloadClaims)).sign(account);
+        }
         private void assertNonNull(String name) {
             if (name == null) {
                 throw new IllegalArgumentException("The Custom Claim's name can't be null.");
