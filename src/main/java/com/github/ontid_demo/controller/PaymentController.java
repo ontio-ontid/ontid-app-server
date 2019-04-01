@@ -68,7 +68,7 @@ public class PaymentController {
 
             Map map = new HashMap();
             map.put("callback","http://127.0.0.1:1111/ontid/payment/callback");
-            map.put("ontid","did:ont:AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ");
+            map.put("ontid",ontid);
             //String privateKey = "03328eee364bc513c3ec5dd389d43e2b2eed4e99aedb09aaf4e7e59dcd5c9342fb";
             //
             //{"address":"ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH","salt":"5kh9AcbKuJVttehC1Qu3IQ==","label":"42efcf68","type":"I","parameters":{"curve":"P-256"},"scrypt":{"dkLen":64,"n":16384,"p":8,"r":8},"key":"clJjGWPdxpI6SCRBkz4QsLI0xDulrd6TOtzmUb+l5rs1Ui+kkNXFJOvkLyqrlnu7","algorithm":"ECDSA"}
@@ -102,7 +102,7 @@ public class PaymentController {
                     withJWTId(UUID.randomUUID().toString().replace("-", "")).withClaim("invokeConfig", params).withClaim("app",map).sign(account);
             Map request = new HashMap();
             request.put("data",jwt);
-            request.put("ontid",ontid);
+            request.put("user",ontid);
             Object response = post(request,rrequestOrderUrl);
             System.out.println(response);
         } catch (Exception e) {
