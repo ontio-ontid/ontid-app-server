@@ -22,11 +22,12 @@ public class ControlDemo {
 
     /**
      * 你可以从这个网站上获取token http://139.219.136.188:10390/#/signin
+     * you can get token from : http://139.219.136.188:10390/#/signin
      */
 
     /**
      * 用户登录后获取的
-     *
+     * get info after user login
      * @return
      */
     String refreshToken = "";
@@ -38,7 +39,7 @@ public class ControlDemo {
 
     /**
      * 用refreshToken刷新 AccessToken
-     *
+     * refresh the accessToken by refreshToken
      * @return
      */
     @GetMapping(value = "/refresh/access")
@@ -50,6 +51,7 @@ public class ControlDemo {
     MyJWTUtils myJWTUtils;
     /**
      * 用AccessToken获取用户余额
+     * get balance from access token
      */
     @GetMapping(value = "/get/balance")
     public String getBalance() throws Exception {

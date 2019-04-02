@@ -6,14 +6,17 @@ package com.github.ontid_demo.util;
 public class Constant {
     /**
      * 三方的WIF
+     * provider WIF
      */
     public static final String ONTID_PROVIDE_WIF = "";
     /**
      * ontid后台的公钥,测试网的
+     * ONT ID backend public key
      */
     public static final String ONTID_PUBLIC_KEY = "026d3557e55fffe7bc5a9a8fc0c7361bc48590c17bf4d0d345e3f354bb64a0452a";
     /**
      * 三方的Ontid
+     * provider Ontid
      */
     public static final String ONTID = "";
 

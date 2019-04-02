@@ -20,7 +20,7 @@ public class MyJWTUtils {
 
     /**
      * 校验token是否正确
-     *
+     * verify token
      * @param token Token
      * @return boolean 是否正确
      */
@@ -58,7 +58,7 @@ public class MyJWTUtils {
 
     /**
      * 获得Token中的信息无需secret解密也能获得
-     *
+     * get info from token without decrypt
      * @param token
      * @param claim
      * @return java.lang.String
@@ -76,7 +76,7 @@ public class MyJWTUtils {
 
     /**
      * 获得Token中的用户
-     *
+     *  get user's ontid from token
      * @param token
      * @return java.lang.String
      */
@@ -93,7 +93,7 @@ public class MyJWTUtils {
 
     /**
      * 获得Token类型
-     *
+     * get the type of token ,refresh or access
      * @param token
      * @return java.lang.String
      */

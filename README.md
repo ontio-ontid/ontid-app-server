@@ -9,7 +9,7 @@ This is demo for java backend developer.
 1. You need to contact us first and Registered the ontid of Applicant, Fill in the parameters returned at registration in [Constant](https://github.com/ontio-ontid/ontid-app-server/blob/master/src/main/java/com/github/ontid_demo/util/Constant.java). 
 ```text
     /**
-     * developer WIF
+     * provider WIF
      */
     public static final String ONTID_PROVIDE_WIF = "";
     /**
@@ -17,7 +17,7 @@ This is demo for java backend developer.
      */
     public static final String ONTID_PUBLIC_KEY = "";
     /**
-     * developer Ontid
+     * provider Ontid
      */
     public static final String ONTID = "";
 
