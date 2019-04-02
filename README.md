@@ -23,7 +23,7 @@ This is demo for java backend developer.
 
 ```
 
-2. After successful login,you can get ```refresh_token``` 和 ```access_token``` from [login](http://139.219.136.188:10390/#/signin) in the testing environment。
+2. After successful login,you can get ```refresh_token``` and ```access_token``` from [login](http://139.219.136.188:10390/#/signin) in the testing environment。
 
 3. analysis ```refresh_token``` , get the ontid of user。
 
