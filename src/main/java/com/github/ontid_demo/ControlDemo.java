@@ -69,8 +69,8 @@ public class ControlDemo {
     MyJWTUtils myJWTUtils;
 
     /**
-     * 用AccessToken获取用户余额
-     * get balance from access token
+     * 用AccessToken获取用户信息
+     * get info from access token
      */
     @GetMapping(value = "/get/info")
     public String getBalance() throws Exception {

@@ -8,6 +8,7 @@ import com.github.ontio.account.Account;
 import com.github.ontio.common.Helper;
 import com.github.ontio.core.transaction.Transaction;
 import com.github.ontio.crypto.SignatureScheme;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -31,6 +32,12 @@ import java.util.*;
 public class PaymentController {
     private final Logger log = LoggerFactory.getLogger(PaymentController.class);
 
+    /**
+     * 收回调结果
+     *
+     * @param obj
+     * @return
+     */
     @PostMapping(value = "/ontid/payment/callback")
     public Object callback(@RequestBody LinkedHashMap<String, String> obj) {
         log.info("callback:{}", JSON.toJSONString(obj));
@@ -40,7 +47,8 @@ public class PaymentController {
     public static void main(String[] args) {
         requestOrder();
     }
-    public static void requestOrder(){
+
+    public static void requestOrder() {
         String requestOrderUrl = "http://127.0.0.1:10332/api/v1/ontid/request/order";
         String ontid = "did:ont:ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH";
         String contractHash = "0200000000000000000000000000000000000000";
@@ -48,14 +56,14 @@ public class PaymentController {
         String payer = "ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH";
         List argsList = new ArrayList();
         Map arg0 = new HashMap();
-        arg0.put("name","from");
-        arg0.put("value","Address:ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH");
+        arg0.put("name", "from");
+        arg0.put("value", "Address:ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH");
         Map arg1 = new HashMap();
-        arg1.put("name","to");
-        arg1.put("value","Address:AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ");
+        arg1.put("name", "to");
+        arg1.put("value", "Address:AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ");
         Map arg2 = new HashMap();
-        arg2.put("name","amount");
-        arg2.put("value",100);
+        arg2.put("name", "amount");
+        arg2.put("value", 100);
         argsList.add(arg0);
         argsList.add(arg1);
         argsList.add(arg2);
@@ -67,15 +75,15 @@ public class PaymentController {
             OntSdk ontSdk = getOntSdk();
 
             Map map = new HashMap();
-            map.put("callback","http://127.0.0.1:1111/ontid/payment/callback");
-            map.put("ontid",ontid);
+            map.put("callback", "http://127.0.0.1:1111/ontid/payment/callback");
+            map.put("ontid", ontid);
             //String privateKey = "03328eee364bc513c3ec5dd389d43e2b2eed4e99aedb09aaf4e7e59dcd5c9342fb";
             //
             //{"address":"ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH","salt":"5kh9AcbKuJVttehC1Qu3IQ==","label":"42efcf68","type":"I","parameters":{"curve":"P-256"},"scrypt":{"dkLen":64,"n":16384,"p":8,"r":8},"key":"clJjGWPdxpI6SCRBkz4QsLI0xDulrd6TOtzmUb+l5rs1Ui+kkNXFJOvkLyqrlnu7","algorithm":"ECDSA"}
-            String privateKey = Account.getGcmDecodedPrivateKey("clJjGWPdxpI6SCRBkz4QsLI0xDulrd6TOtzmUb+l5rs1Ui+kkNXFJOvkLyqrlnu7","12345678a","ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH",Base64.getDecoder().decode("5kh9AcbKuJVttehC1Qu3IQ=="),16384, SignatureScheme.SHA256WITHECDSA);
+            String privateKey = Account.getGcmDecodedPrivateKey("clJjGWPdxpI6SCRBkz4QsLI0xDulrd6TOtzmUb+l5rs1Ui+kkNXFJOvkLyqrlnu7", "12345678a", "ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH", Base64.getDecoder().decode("5kh9AcbKuJVttehC1Qu3IQ=="), 16384, SignatureScheme.SHA256WITHECDSA);
 
             Account account = new Account(Helper.hexToBytes(privateKey), SignatureScheme.SHA256WITHECDSA);
-            if(false) {
+            if (false) {
 //            ontSdk.getWalletMgr().createIdentityFromPriKey("12345678a",privateKey);
 //            ontSdk.getWalletMgr().writeWallet();
 
@@ -83,27 +91,27 @@ public class PaymentController {
 //            Identity identity = ontSdk.getWalletMgr().getWallet().getIdentity(ontidregistry);
 //            ontSdk.nativevm().ontId().sendRegister(identity,"12345678a",account,20000,500);
             }
-            Map params = getParams(contractHash,method,argsList,payer);
+            Map params = getParams(contractHash, method, argsList, payer);
             Map req = new HashMap();
             Map tmp = new HashMap();
-            tmp.put("invokeConfig",params);
-           // byte[] bys = java.util.Base64.getDecoder().decode(order.getToken());
-            req.put("action","invoke");
-            req.put("params",tmp);
+            tmp.put("invokeConfig", params);
+            // byte[] bys = java.util.Base64.getDecoder().decode(order.getToken());
+            req.put("action", "invoke");
+            req.put("params", tmp);
 
-            if(false){
+            if (false) {
                 Transaction[] tansactions = ontSdk.makeTransactionByJson(JSON.toJSONString(req));
-                ontSdk.addSign(tansactions[0],account);
+                ontSdk.addSign(tansactions[0], account);
                 ontSdk.getConnect().sendRawTransactionPreExec(tansactions[0].toHexString());
                 System.exit(0);
             }
 
-            String jwt =  MyJwt.create().withIssuer(Constant.ONTID).withExpiresAt(expireDate).withAudience(Constant.ONTID).withIssuedAt(new Date()).
-                    withJWTId(UUID.randomUUID().toString().replace("-", "")).withClaim("invokeConfig", params).withClaim("app",map).sign(account);
+            String jwt = MyJwt.create().withIssuer(Constant.ONTID).withExpiresAt(expireDate).withAudience(Constant.ONTID).withIssuedAt(new Date()).
+                    withJWTId(UUID.randomUUID().toString().replace("-", "")).withClaim("invokeConfig", params).withClaim("app", map).sign(account);
             Map request = new HashMap();
-            request.put("data",jwt);
-            request.put("user",ontid);
-            Object response = post(request,requestOrderUrl);
+            request.put("data", jwt);
+            request.put("user", ontid);
+            Object response = post(request, requestOrderUrl);
             System.out.println(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,6 +135,7 @@ public class PaymentController {
         }
         return "";
     }
+
     public static Map getParams(String contractHash, String method, List argsList, String payer) {
         Map str = new HashMap();
         Map parms = new HashMap();
@@ -134,21 +143,21 @@ public class PaymentController {
         List functions = new ArrayList();
         Map function = new HashMap();
 
-        function.put("operation",method);
-        function.put("args",argsList);
+        function.put("operation", method);
+        function.put("args", argsList);
 
         functions.add(function);
 
-        invokeConfig.put("contractHash",contractHash);
-        invokeConfig.put("functions",functions);
-        invokeConfig.put("payer",payer);
-        invokeConfig.put("gasLimit",40000);
-        invokeConfig.put("gasPrice",500);
+        invokeConfig.put("contractHash", contractHash);
+        invokeConfig.put("functions", functions);
+        invokeConfig.put("payer", payer);
+        invokeConfig.put("gasLimit", 40000);
+        invokeConfig.put("gasPrice", 500);
 
-        parms.put("invokeConfig",invokeConfig);
+        parms.put("invokeConfig", invokeConfig);
 
-        str.put("action","invoke");
-        str.put("params",parms);
+        str.put("action", "invoke");
+        str.put("params", parms);
         return invokeConfig;
     }
 
