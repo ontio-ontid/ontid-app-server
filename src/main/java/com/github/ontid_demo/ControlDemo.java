@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 根据用户的access token去查询用户相关信息
+ */
 @Slf4j
 @RestController
 public class ControlDemo {
@@ -28,18 +31,22 @@ public class ControlDemo {
     /**
      * 用户登录后获取的
      * get info after user login
+     *
      * @return
      */
     String refreshToken = "";
-    String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJhdWQiOiJkaWQ6b250OkFNdmpVV1o2Y25BQVVzQk43dWpBQnRMUzlHbWVoOFNQU2oiLCJpc3MiOiJkaWQ6b250OkFhdlJRcVhlOVByYVY1dFlnQnF2VjRiVXE4TFNzdmpjV1MiLCJleHAiOjE1NTM4NDMxMzYsImlhdCI6MTU1Mzc1NjczNiwianRpIjoiNmJhMjdiMjNhOGY1NDc5ODg3MGJmMTVmMWJiZDhhMzciLCJjb250ZW50Ijp7InR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJvbnRpZCI6ImRpZDpvbnQ6QVV6TXdVNXRicXFlM0UyS1N1aWlHUW1VbThoR1JUamczRSJ9fQ.MDE5Y2MzZTMwNjZmZDc4YzBjN2RjMzAwYzU1OTMyNmY5YmNjMWVjMWJjZTE1YTIyODlkMjUzODUxYmNiNTg1MzEwMjY5ZDMxYWU5Y2M1YzMyOWIyNjNmNGJjNjc1YmQ0OTM2M2YxZmJkMDExNTNmOTM3NTA1NmUyZjZhOTg0OWQwMQ";
+    String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJhdWQiOiJkaWQ6b250OkFNdmpVV1o2Y25BQVVzQk43dWpBQnRMUzlHbWVoOFNQU2oiLCJpc3MiOiJkaWQ6b250OkFhdlJRcVhlOVByYVY1dFlnQnF2VjRiVXE4TFNzdmpjV1MiLCJleHAiOjE1NTUwNTU3MzksImlhdCI6MTU1NDk2OTMzOSwianRpIjoiZjQ1ZmMyMmVkMjBhNDFhMGE1YzdhMzZhYjIxZTkxNTAiLCJjb250ZW50Ijp7InR5cGUiOiJhY2Nlc3NfdG9rZW4iLCJvbnRpZCI6ImRpZDpvbnQ6QU14clNHSHl4Z25XUzZxYzFRalROWWVFYXczWDNEdnpoZiJ9fQ.MDFiZDVhYWQ2MzRkNzlkOTU3ZjE3YWYyNDc3MDUyZGUxNzJjYjdmYjgxZWViOThmYTg2ODgyM2ZiYjM5ZjIyMjZiYWZlYTlkNGFkNjMwMzM0OWY4N2YyYzBiZDlmNzg5M2IzYjhiYjdkZTg1MjFmYzQ1MDMwOGY2NGRmM2E5ZjkwNg";
 
     //测试接口
-    String getBalanceUrl = "http://139.219.136.188:10331/api/v1/ontid/getbalance";
+    //刷新accesstoken
     String refreshUrl = "http://139.219.136.188:10331/api/v1/access/refresh";
+    //获取用户相关信息
+    String infoUrl = "http://139.219.136.188:10331/api/v1/ontid/info";
 
     /**
      * 用refreshToken刷新 AccessToken
      * refresh the accessToken by refreshToken
+     *
      * @return
      */
     @GetMapping(value = "/refresh/access")
@@ -49,13 +56,14 @@ public class ControlDemo {
 
     @Autowired
     MyJWTUtils myJWTUtils;
+
     /**
      * 用AccessToken获取用户余额
      * get balance from access token
      */
-    @GetMapping(value = "/get/balance")
+    @GetMapping(value = "/get/info")
     public String getBalance() throws Exception {
-        return post(Constant.ACCESS_TOKEN, accessToken, getBalanceUrl).toString();
+        return post(Constant.ACCESS_TOKEN, accessToken, infoUrl).toString();
     }
 
     private Object post(String type, String token, String refreshUrl) throws Exception {

@@ -41,7 +41,7 @@ public class PaymentController {
         requestOrder();
     }
     public static void requestOrder(){
-        String rrequestOrderUrl = "http://127.0.0.1:10332/api/v1/ontid/request/order";
+        String requestOrderUrl = "http://127.0.0.1:10332/api/v1/ontid/request/order";
         String ontid = "did:ont:ANS9JnoER5WqcE75jHeYZAuSWRvTjP69WH";
         String contractHash = "0200000000000000000000000000000000000000";
         String method = "transfer";
@@ -103,7 +103,7 @@ public class PaymentController {
             Map request = new HashMap();
             request.put("data",jwt);
             request.put("user",ontid);
-            Object response = post(request,rrequestOrderUrl);
+            Object response = post(request,requestOrderUrl);
             System.out.println(response);
         } catch (Exception e) {
             e.printStackTrace();
