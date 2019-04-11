@@ -1,5 +1,6 @@
 package com.github.ontid_demo;
 
+import com.alibaba.fastjson.JSON;
 import com.github.ontid_demo.util.Constant;
 import com.github.ontid_demo.util.MyJWTUtils;
 
@@ -7,12 +8,18 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +49,10 @@ public class ControlDemo {
     String refreshUrl = "http://139.219.136.188:10331/api/v1/access/refresh";
     //获取用户相关信息
     String infoUrl = "http://139.219.136.188:10331/api/v1/ontid/info";
+    //获取用户批量订单
+    String orderRangeUrl = "http://139.219.136.188:10331/api/v1/ontid/query/order/range";
+    //获取用户订单详情
+    String orderDetailUrl = "http://139.219.136.188:10331/api/v1/ontid/query/order";
 
     /**
      * 用refreshToken刷新 AccessToken
@@ -66,10 +77,38 @@ public class ControlDemo {
         return post(Constant.ACCESS_TOKEN, accessToken, infoUrl).toString();
     }
 
-    private Object post(String type, String token, String refreshUrl) throws Exception {
+    /**
+     * 用AccessToken获取用户订单
+     * get balance from access token
+     */
+    @GetMapping(value = "/query/order/{currentPage}/{size}")
+    public String queryOrder(@PathVariable("currentPage") int currentPage, @PathVariable("size") int size) throws Exception {
+        HashMap<String, Object> param = new HashMap<>();
+        param.put("currentPage", currentPage);
+        param.put("size", size);
+        return postParam(Constant.ACCESS_TOKEN, accessToken, orderRangeUrl, param).toString();
+    }
+
+    /**
+     * 用AccessToken获取用户订单详情
+     * get balance from access token
+     */
+    @GetMapping(value = "/query/order/{orderId}")
+    public String queryOrderDetail(@PathVariable("orderId") String orderId) throws Exception {
+        HashMap<String, Object> param = new HashMap<>();
+        param.put("orderId", orderId);
+        return postParam(Constant.ACCESS_TOKEN, accessToken, orderDetailUrl, param).toString();
+    }
+
+    private Object post(String type, String token, String restfulUrl) throws Exception {
+        return postParam(type, token, restfulUrl, new HashMap<>());
+    }
+
+    private Object postParam(String type, String token, String refreshUrl, Map<String, Object> data) throws Exception {
         HttpPost httpPost = new HttpPost(refreshUrl);
         try {
             httpPost.setHeader(type, token);
+            httpPost.setEntity(new StringEntity(JSON.toJSONString(data), ContentType.APPLICATION_JSON));
             CloseableHttpClient httpClient;
             RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(3000).setSocketTimeout(100000).build();
             httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
