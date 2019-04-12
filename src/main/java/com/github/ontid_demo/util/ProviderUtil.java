@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Component
 public class ProviderUtil {
-    public Map getAppParams(String name, String logo, String message, String ontid, String callback) {
+    public Map getAppOrderParams(String name, String logo, String message, String ontid, String callback) {
         Map map = new HashMap();
 //        "name": "",
 //                "logo":"",
@@ -23,6 +23,12 @@ public class ProviderUtil {
         map.put("ontid", ontid);
         map.put("callback", callback);
         map.put("nonce", UUID.randomUUID().toString().replace("-", ""));
+        return map;
+    }
+
+    public Map getAppQueryParams(String ontid) {
+        Map map = new HashMap();
+        map.put("ontid", ontid);
         return map;
     }
 }

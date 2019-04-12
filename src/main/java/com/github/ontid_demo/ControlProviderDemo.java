@@ -67,7 +67,7 @@ public class ControlProviderDemo {
     @GetMapping(value = "/generateOrder")
     public String refreshAccessToken() throws Exception {
         Map txMap = transactionUtil.transferParam("ong", wallet, receiver, 1000000000);
-        Map appParams = providerUtil.getAppParams("test", "www.baidu.com", "这是一个测试内容", Constant.ONTID, callbackAddress);
+        Map appParams = providerUtil.getAppOrderParams("test", "www.baidu.com", "这是一个测试内容", Constant.ONTID, callbackAddress);
         long currentTime = System.currentTimeMillis() + 30 * 60 * 1000;
         Date expireDate = new Date(currentTime);
         byte[] bytes = Account.getPrivateKeyFromWIF(Constant.ONTID_PROVIDE_WIF);
@@ -75,7 +75,7 @@ public class ControlProviderDemo {
         String jwt = MyJwt.create().withIssuer(Constant.ONTID).withExpiresAt(expireDate).withAudience(Constant.ONTID).withIssuedAt(new Date()).
                 withJWTId(UUID.randomUUID().toString().replace("-", "")).withClaim("invokeConfig", txMap).withClaim("app", appParams).sign(account);
         Map request = new HashMap();
-        request.put("data", jwt);
+        request.put(Constant.APP_TOKEN, jwt);
         request.put("user", user);
         return postParam(generateOrder, request).toString();
     }
@@ -85,19 +85,35 @@ public class ControlProviderDemo {
 
     @GetMapping(value = "/query/order/provider/{currentPage}/{size}")
     public String queryOrder(@PathVariable("currentPage") int currentPage, @PathVariable("size") int size) throws Exception {
+        Map appParams = providerUtil.getAppQueryParams(Constant.ONTID);
+        long currentTime = System.currentTimeMillis() + 30 * 60 * 1000;
+        Date expireDate = new Date(currentTime);
+        byte[] bytes = Account.getPrivateKeyFromWIF(Constant.ONTID_PROVIDE_WIF);
+        Account account = new Account(Helper.hexToBytes(Helper.toHexString(bytes)), SignatureScheme.SHA256WITHECDSA);
+        String jwt = MyJwt.create().withIssuer(Constant.ONTID).withExpiresAt(expireDate).withAudience(Constant.ONTID).withIssuedAt(new Date()).
+                withJWTId(UUID.randomUUID().toString().replace("-", "")).withClaim("app", appParams).sign(account);
+
         HashMap<String, Object> param = new HashMap<>();
         param.put("currentPage", currentPage);
         param.put("size", size);
-        param.put("provider", Constant.ONTID);
+        param.put(Constant.APP_TOKEN, jwt);
         return postParam(orderRangeUrl, param).toString();
     }
 
 
     @GetMapping(value = "/query/order/provider/{orderId}")
     public String queryOrderDetail(@PathVariable("orderId") String orderId) throws Exception {
+        Map appParams = providerUtil.getAppQueryParams(Constant.ONTID);
+        long currentTime = System.currentTimeMillis() + 30 * 60 * 1000;
+        Date expireDate = new Date(currentTime);
+        byte[] bytes = Account.getPrivateKeyFromWIF(Constant.ONTID_PROVIDE_WIF);
+        Account account = new Account(Helper.hexToBytes(Helper.toHexString(bytes)), SignatureScheme.SHA256WITHECDSA);
+        String jwt = MyJwt.create().withIssuer(Constant.ONTID).withExpiresAt(expireDate).withAudience(Constant.ONTID).withIssuedAt(new Date()).
+                withJWTId(UUID.randomUUID().toString().replace("-", "")).withClaim("app", appParams).sign(account);
+
         HashMap<String, Object> param = new HashMap<>();
         param.put("orderId", orderId);
-        param.put("provider", Constant.ONTID);
+        param.put(Constant.APP_TOKEN, jwt);
         return postParam(orderDetailUrl, param).toString();
     }
 
